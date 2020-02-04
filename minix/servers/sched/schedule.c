@@ -100,9 +100,9 @@ int do_noquantum(message *m_ptr)
 	}
 
 	rmp = &schedproc[proc_nr_n];
-	// if (rmp->priority < MIN_USER_Q) {
-	rmp->priority = 7; /* lower priority */
-	// }
+	if (rmp->priority < MIN_USER_Q) {
+		rmp->priority -= 1; /* increase priority */
+	}
 
 	if ((rv = schedule_process_local(rmp)) != OK) {
 		return rv;
@@ -209,7 +209,7 @@ int do_start_scheduling(message *m_ptr)
 				&parent_nr_n)) != OK)
 			return rv;
 
-		rmp->priority = 7;
+		rmp->priority = schedproc[parent_nr_n].priority;
 		rmp->time_slice = schedproc[parent_nr_n].time_slice;
 		break;
 		
