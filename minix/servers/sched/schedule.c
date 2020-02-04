@@ -209,7 +209,7 @@ int do_start_scheduling(message *m_ptr)
 				&parent_nr_n)) != OK)
 			return rv;
 
-		rmp->priority = schedproc[parent_nr_n].priority;
+		rmp->priority = 7;
 		rmp->time_slice = schedproc[parent_nr_n].time_slice;
 		break;
 		
