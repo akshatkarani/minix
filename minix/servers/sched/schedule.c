@@ -14,15 +14,12 @@
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
 #include "include/minix/endpoint.h" /* for queue constants */
-#include <sys/time.h>
+#include <time.h>
 
 
 long long timeInMilliseconds(void) {
-	printf("1");
     struct timeval tv;
-	printf("2");
     gettimeofday(&tv,NULL);
-    printf("3");
 	return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
 }
 

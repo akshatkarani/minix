@@ -2,5 +2,6 @@
     "files.associations": {
         "config.h": "c",
         "endpoint.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
