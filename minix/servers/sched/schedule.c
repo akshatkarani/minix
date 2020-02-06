@@ -14,14 +14,6 @@
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
 #include "include/minix/endpoint.h" /* for queue constants */
-#include <time.h>
-
-
-long long timeInMilliseconds(void) {
-    struct timeval tv;
-    gettimeofday(&tv,NULL);
-	return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
-}
 
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
@@ -333,7 +325,7 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		rmp->endpoint, err);
 	}
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
-		printf("PID: %d swapped in (%llu)\n", _ENDPOINT_P(rmp->endpoint), timeInMilliseconds());
+		printf("PID: %d swapped in (%llu)\n", _ENDPOINT_P(rmp->endpoint), (long long) time(NULL));
 	}
 	return err;
 }
