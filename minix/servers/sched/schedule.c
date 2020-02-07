@@ -18,8 +18,14 @@
 
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
-struct timeval timval;
-time_t curtime;
+
+long long timeInMilliseconds(void) {
+    struct timeval tv;
+
+    gettimeofday(&tv,NULL);
+    return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
+}
+
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
 
 static int schedule_process(struct schedproc * rmp, unsigned flags);
@@ -329,10 +335,6 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
 		printf("PID: %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
 	}
-	if (gettimeofday(&timval, NULL) == -1)
-		err(1, "gettimeofday failed");
-	curtime = timval.tv_sec;
-	printf("Time: %lld", (long long )curtime);
 	return err;
 }
 
