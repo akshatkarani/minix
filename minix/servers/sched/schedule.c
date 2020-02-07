@@ -19,13 +19,6 @@
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
 
-long long timeInMilliseconds(void) {
-    struct timeval tv;
-
-    gettimeofday(&tv,NULL);
-    return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
-}
-
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
 
 static int schedule_process(struct schedproc * rmp, unsigned flags);
@@ -90,6 +83,13 @@ static void pick_cpu(struct schedproc * proc)
 #else
 	proc->cpu = 0;
 #endif
+}
+
+long long timeInMilliseconds(void) {
+    struct timeval tv;
+
+    gettimeofday(&tv,NULL);
+    return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
 }
 
 /*===========================================================================*
