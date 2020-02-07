@@ -20,7 +20,6 @@ static minix_timer_t sched_timer;
 static unsigned balance_timeout;
 
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
-time_t endTime, startTime;
 
 static int schedule_process(struct schedproc * rmp, unsigned flags);
 static void balance_queues(minix_timer_t *tp);
@@ -325,6 +324,11 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		new_quantum, new_cpu)) != OK) {
 		printf("PM: An error occurred when trying to schedule %d: %d\n",
 		rmp->endpoint, err);
+	}
+	if ((err = time(NULL)) != OK)) {
+		print("aa");
+	} else {
+		print("bb");
 	}
 	// time(NULL);
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
