@@ -1536,7 +1536,9 @@ void enqueue(
  * process is assigned to.
  */
   int q = rp->p_priority;	 		/* scheduling queue to use */
-  printf("[Debug]Time Left: %llu\n", rp->p_cpu_time_left);
+  if (rp->p_priority >= 7) {
+	  printf("[Debug]Time Left: %llu\n", rp->p_cpu_time_left);
+  }
   struct proc **rdy_head, **rdy_tail;
   
   assert(proc_is_runnable(rp));
