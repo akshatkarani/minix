@@ -332,7 +332,7 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	if (gettimeofday(&timval, NULL) == -1)
 		err(1, "gettimeofday failed");
 	curtime = timval.tv_sec;
-	printf("Time: %lld", (long long curtime))
+	printf("Time: %lld", (long long )curtime);
 	return err;
 }
 
