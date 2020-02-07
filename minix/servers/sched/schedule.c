@@ -14,9 +14,11 @@
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
 #include "include/minix/endpoint.h" /* for queue constants */
+#include <time.h>
 
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
+time_t currentTime;
 
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
 
@@ -324,13 +326,10 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		printf("PM: An error occurred when trying to schedule %d: %d\n",
 		rmp->endpoint, err);
 	}
-	if(time(NULL)) {
-		print("sss");
-	} else {
-		print("fff");
-	}
+	time(&currentTime);
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
 		printf("PID: %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
+		printf("Time = %ld seconds\n", (long) (endTime);
 	}
 	return err;
 }
