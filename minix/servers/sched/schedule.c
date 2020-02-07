@@ -91,7 +91,7 @@ long long timeInMilliseconds(void) {
     gettimeofday(&tv,NULL);
 	printf("2");
     // return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
-	return 200
+	return 200;
 }
 
 /*===========================================================================*
