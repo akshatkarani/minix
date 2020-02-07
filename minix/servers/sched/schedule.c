@@ -14,12 +14,13 @@
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
 #include "include/minix/endpoint.h" /* for queue constants */
-// #include <time.h>
+#include <time.h>
 
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
 
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
+time_t endTime, startTime;
 
 static int schedule_process(struct schedproc * rmp, unsigned flags);
 static void balance_queues(minix_timer_t *tp);
@@ -327,7 +328,7 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 	}
 	// time(NULL);
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
-		printf("PID: %d swapped in (%d)\n", _ENDPOINT_P(rmp->endpoint), new_quantum);
+		printf("PID: %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
 		// printf("Time = %ld seconds\n", (long) (currentTime));
 	}
 	return err;

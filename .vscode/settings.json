@@ -2,7 +2,8 @@
     "files.associations": {
         "config.h": "c",
         "endpoint.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "proc.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
