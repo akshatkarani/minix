@@ -86,9 +86,9 @@ static void pick_cpu(struct schedproc * proc)
 }
 
 long long timeInMilliseconds(void) {
-    struct timeval tv;
+    // struct timeval tv;
 	printf("1");
-    gettimeofday(&tv,NULL);
+    // gettimeofday(&tv,NULL);
 	printf("2");
     // return (((long long)tv.tv_sec)*1000)+(tv.tv_usec/1000);
 	return 200;
