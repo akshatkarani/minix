@@ -17,6 +17,7 @@
 #include <time.h>
 
 static minix_timer_t sched_timer;
+time_t endTime, startTime;
 static unsigned balance_timeout;
 
 #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
@@ -325,15 +326,11 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		printf("PM: An error occurred when trying to schedule %d: %d\n",
 		rmp->endpoint, err);
 	}
-	if ((err = time(NULL)) != OK) {
-		printf("aa");
-	} else {
-		printf("bb");
-	}
-	// time(NULL);
 	if(rmp->priority >= 7 && rmp->max_priority == 7) {
+		time(&startTime);
 		printf("PID: %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
-		// printf("Time = %ld seconds\n", (long) (currentTime));
+		time(&endTime);
+		printf("Time = %ld seconds\n", (long) (endTime - startTime));
 	}
 	return err;
 }
