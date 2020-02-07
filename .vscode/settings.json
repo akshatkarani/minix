@@ -3,7 +3,8 @@
         "config.h": "c",
         "endpoint.h": "c",
         "time.h": "c",
-        "proc.h": "c"
+        "proc.h": "c",
+        "com.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
