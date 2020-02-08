@@ -1621,7 +1621,7 @@ static void enqueue_head(struct proc *rp)
   rdy_head = get_cpu_var(rp->p_cpu, run_q_head);
   rdy_tail = get_cpu_var(rp->p_cpu, run_q_tail);
 	if(rp->p_priority >= 7) {
-		printf("PID: swapped in (%d)\n", rp->p_cpu_time_left);
+		printf("PID: swapped in (%llu)\n", rp->p_cpu_time_left);
 	}
 
   /* Now add the process to the queue. */
