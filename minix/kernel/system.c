@@ -664,7 +664,9 @@ int sched_proc(struct proc *p,
 	if (quantum != -1) {
 		p->p_quantum_size_ms = quantum;
 		p->p_cpu_time_left = ms_2_cpu_time(quantum);
-    printf("Time Units: (%d) (%d) (%llu)\n", p->p_quantum_size_ms, quantum, p->p_cpu_time_left);
+    if (p->p_priority >=7) {
+      printf("Time Units: (%d) (%d) (%d) (%d) (%llu)\n", p->p_quantum_size_ms, quantum, p->p_virt_left, p->p_prof_left, p->p_cpu_time_left);
+    }
 	}
 #ifdef CONFIG_SMP
 	if (cpu != -1)
