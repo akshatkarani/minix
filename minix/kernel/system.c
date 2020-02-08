@@ -625,7 +625,7 @@ int sched_proc(struct proc *p,
 {
 
   if (p->p_priority >=7) {
-  printf("Time Units: (%d) (%d) (%d) (%d) (%d) (%d) (%llu)\n", p->p_quantum_size_ms, quantum, p->p_virt_left, p->p_prof_left, p->p_user_time, p->p_sys_time, p->p_cpu_time_left);
+  printf("Time Units: (%d) (%d) (%d) (%d) (%d) (%d) (%llu) (%d)\n", p->p_quantum_size_ms, quantum, p->p_virt_left, p->p_prof_left, p->p_user_time, p->p_sys_time, p->p_cpu_time_left, cpu_time_2_ms(p->p_cpu_time_left));
   }
 
 	/* Make sure the values given are within the allowed range.*/
