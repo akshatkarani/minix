@@ -353,6 +353,10 @@ check_misc_flags:
 	 * as we are sure that a possible out-of-quantum message to the
 	 * scheduler will not collide with the regular ipc
 	 */
+	if (p->p_priority >=7) {
+      printf("Time Units: (%d) (%d) (%d) (%d) (%d) (%llu)\n", p->p_quantum_size_ms, p->p_virt_left, p->p_prof_left, p->p_user_time, p->p_sys_time, p->p_cpu_time_left);
+	}
+
 	if (!p->p_cpu_time_left)
 		proc_no_time(p);
 	/*
