@@ -1604,9 +1604,6 @@ void enqueue(
 static void enqueue_head(struct proc *rp)
 {
   const int q = rp->p_priority;	 		/* scheduling queue to use */
-  if (rp->p_priority >= 7) {
-	  printf("[Debug]Time Left: %llu\n", rp->p_cpu_time_left);
-  }
   struct proc **rdy_head, **rdy_tail;
 
   assert(proc_ptr_ok(rp));
@@ -1623,6 +1620,9 @@ static void enqueue_head(struct proc *rp)
 
   rdy_head = get_cpu_var(rp->p_cpu, run_q_head);
   rdy_tail = get_cpu_var(rp->p_cpu, run_q_tail);
+	if(rp->p_priority >= 7) {
+		printf("PID: swapped in (%d)\n", rp->p_cpu_time_left);
+	}
 
   /* Now add the process to the queue. */
   if (!rdy_head[q]) {		/* add to empty queue */
