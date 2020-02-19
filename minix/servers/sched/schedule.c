@@ -13,6 +13,7 @@
 #include <minix/com.h>
 #include <machine/archtypes.h>
 #include "kernel/proc.h" /* for queue constants */
+#include "include/minix/endpoint.h" /* for queue constants */
 
 static minix_timer_t sched_timer;
 static unsigned balance_timeout;
@@ -215,7 +216,6 @@ int do_start_scheduling(message *m_ptr)
 		/* not reachable */
 		assert(0);
 	}
-
 	/* Take over scheduling the process. The kernel reply message populates
 	 * the processes current priority and its time slice */
 	if ((rv = sys_schedctl(0, rmp->endpoint, 0, 0, 0)) != OK) {
@@ -324,7 +324,9 @@ static int schedule_process(struct schedproc * rmp, unsigned flags)
 		printf("PM: An error occurred when trying to schedule %d: %d\n",
 		rmp->endpoint, err);
 	}
-
+	if(rmp->priority >= 7 && rmp->max_priority == 7) {
+		printf("PID: %d swapped in\n", _ENDPOINT_P(rmp->endpoint));
+	}
 	return err;
 }
 
