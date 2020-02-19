@@ -624,10 +624,6 @@ int sched_proc(struct proc *p,
 			int cpu)
 {
 
-  if (p->p_priority >=7 && !(p->p_quantum_size_ms == 500)) {
-    printf("Time Units: (%d) (%llu) (%d)\n", p->p_quantum_size_ms, p->p_cpu_time_left, cpu_time_2_ms(p->p_cpu_time_left));
-  }
-
 	/* Make sure the values given are within the allowed range.*/
 	if ((priority < TASK_Q && priority != -1) || priority > NR_SCHED_QUEUES)
 		return(EINVAL);
