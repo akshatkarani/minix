@@ -51,7 +51,6 @@ int fs_lookup()
   flags		= fs_m_in.m_vfs_fs_lookup.flags;
 
   /* Check length. */
-  printf("Path: %s", user_path);
   if(len > sizeof(user_path)) return(E2BIG);	/* too big for buffer */
   if(len == 0) return(EINVAL);			/* too small */
 
@@ -77,6 +76,7 @@ int fs_lookup()
 
   /* Lookup inode */
   rip = NULL;
+  printf("Path: %s", user_path);
   r = parse_path(dir_ino, root_ino, flags, &rip, &offset, &symlinks);
 
   if(symlinks != 0 && (r == ELEAVEMOUNT || r == EENTERMOUNT || r == ESYMLINK)){
