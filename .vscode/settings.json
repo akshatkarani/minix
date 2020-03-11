@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "string.h": "c"
+        "string.h": "c",
+        "string": "c",
+        "filesystem": "c",
+        "iosfwd": "c"
     }
 }
