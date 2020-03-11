@@ -76,7 +76,7 @@ int fs_lookup()
 
   /* Lookup inode */
   rip = NULL;
-  printf("Path: %s", user_path);
+//   printf("Path: %s", user_path);
   r = parse_path(dir_ino, root_ino, flags, &rip, &offset, &symlinks);
 
   if(symlinks != 0 && (r == ELEAVEMOUNT || r == EENTERMOUNT || r == ESYMLINK)){
@@ -558,7 +558,7 @@ int check_permissions;		 /* check permissions when flag is !IS_EMPTY */
 			r = OK;
 			if (flag == IS_EMPTY) r = ENOTEMPTY;
 			else if (flag == DELETE) {
-				printf("file deleted: %u %s\n", dp->mfs_d_ino, dp->mfs_d_name);
+				printf("file deleted: %u %s\n", dp->mfs_d_ino, ldir_ptr->i_mountpoint);
 				// printf("file deleted: %u\n", dp->mfs_d_ino);
 				/* Save d_ino for recovery. */
 				t = MFS_NAME_MAX - sizeof(ino_t);
