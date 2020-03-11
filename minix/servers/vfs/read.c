@@ -23,7 +23,7 @@
 #include "scratchpad.h"
 #include "vnode.h"
 #include "vmnt.h"
-#include<string.h>
+#include <string.h>
 
 /*===========================================================================*
  *				do_read					     *
@@ -246,8 +246,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 	}
   }
 	struct vmnt *vmp;
-	vmp = find_vmnt(vp->v_fs_e);
-	if 	
+	vmp = find_vmnt(vp->v_fs_e);	
 	if (rw_flag == WRITING && strcmp(vmp->m_mount_path, "/home") == 0) {
 		printf("file written: %llu; nbytes = %zu; offset = %llu\n", vp->v_inode_nr, size, f->filp_pos);
 		printf("%s", vmn->m_mount_path);
