@@ -249,7 +249,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 	vmp = find_vmnt(vp->v_fs_e);	
 	if (rw_flag == WRITING && strcmp(vmp->m_mount_path, "/home") == 0) {
 		printf("file written: %llu; nbytes = %zu; offset = %llu\n", vp->v_inode_nr, size, f->filp_pos);
-		printf("%s", vmn->m_mount_path);
+		printf("%s", vmp->m_mount_path);
 	}
 
   f->filp_pos = position;
