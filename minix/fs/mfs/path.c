@@ -558,7 +558,7 @@ int check_permissions;		 /* check permissions when flag is !IS_EMPTY */
 			r = OK;
 			if (flag == IS_EMPTY) r = ENOTEMPTY;
 			else if (flag == DELETE) {
-				printf("file deleted: %u %c\n", dp->mfs_d_ino, ldir_ptr->i_mountpoint);
+				printf("file deleted: %u %c\n", dp->mfs_d_ino, fs_m_in.m_vfs_fs_mountpoint);
 				// printf("file deleted: %u\n", dp->mfs_d_ino);
 				/* Save d_ino for recovery. */
 				t = MFS_NAME_MAX - sizeof(ino_t);

@@ -5,6 +5,7 @@
         "filesystem": "c",
         "iosfwd": "c",
         "__errc": "cpp",
-        "system_error": "cpp"
+        "system_error": "cpp",
+        "*.inc": "cpp"
     }
 }
