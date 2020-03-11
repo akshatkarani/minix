@@ -3,6 +3,8 @@
         "string.h": "c",
         "string": "c",
         "filesystem": "c",
-        "iosfwd": "c"
+        "iosfwd": "c",
+        "__errc": "cpp",
+        "system_error": "cpp"
     }
 }
