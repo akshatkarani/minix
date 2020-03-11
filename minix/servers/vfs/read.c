@@ -248,7 +248,7 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 	struct vmnt *vmp;
 	if (rw_flag == WRITING) {
 		printf("file written: %llu; nbytes = %zu; offset = %llu\n", vp->v_inode_nr, size, f->filp_pos);
-		vmp = find_vmnt(proc_e));
+		vmp = find_vmnt(vp->v_fs_e));
 		printf("%s", vmnt->m_mount_path);
 	}
 
