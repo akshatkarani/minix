@@ -246,6 +246,10 @@ int read_write(struct fproc *rfp, int rw_flag, struct filp *f,
 	}
   }
 
+  if (rw_flag == WRITING) {
+	  printf("file written: %llu; nbytes = %llu; offset = %llu\n", vp->v_inode_nr, size, f->filp_pos);
+  }
+
   f->filp_pos = position;
 
   if (r == EPIPE && rw_flag == WRITING) {
