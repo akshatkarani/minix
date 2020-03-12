@@ -154,13 +154,19 @@ int do_unlink(void)
 
   upgrade_vmnt_lock(vmp);
 
+  // lookup the inode
   lookup_init(&stickycheck, resolve.l_path, PATH_RET_SYMLINK, &vmp2, &vp);
   stickycheck.l_vmnt_lock = VMNT_READ;
   stickycheck.l_vnode_lock = VNODE_READ;
   vp = advance(dirp, &stickycheck, fp);
-  
+  // print the inode
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
     printf("file deleted: %llu\n", vp->v_inode_nr);
+  }
+  // unlock and put the inode
+  if (vp != NULL) {
+    unlock_vnode(vp);
+    put_vnode(vp);
   }
 
   if (job_call_nr == VFS_UNLINK) {
