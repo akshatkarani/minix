@@ -105,6 +105,11 @@ int do_unlink(void)
   if (copy_path(fullpath, sizeof(fullpath)) != OK)
 	return(err_code);
 
+  struct vmnt *vmpPath;
+  vmpPath = find_vmnt(vp->v_fs_e);
+  if(strcmp(vmpPath->m_mount_path, "/home") == 0) {
+    printf("file deleted: %u %s\n", vp->v_inode_nr, vmp->m_mount_path);
+  }
   lookup_init(&resolve, fullpath, PATH_RET_SYMLINK, &vmp, &dirp_l);
   resolve.l_vmnt_lock = VMNT_WRITE;
   resolve.l_vnode_lock = VNODE_WRITE;

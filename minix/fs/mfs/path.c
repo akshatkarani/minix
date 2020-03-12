@@ -62,8 +62,6 @@ int fs_lookup()
   /* Verify this is a null-terminated path. */
   if(user_path[len - 1] != '\0') return(EINVAL);
   
-  strcpy(user_pathCopy, user_path);
-  
   memset(&credentials, 0, sizeof(credentials));
   if(!(flags & PATH_GET_UCRED)) { /* Do we have to copy uid/gid credentials? */
         caller_uid	= fs_m_in.m_vfs_fs_lookup.uid;
@@ -559,7 +557,7 @@ int check_permissions;		 /* check permissions when flag is !IS_EMPTY */
 			r = OK;
 			if (flag == IS_EMPTY) r = ENOTEMPTY;
 			else if (flag == DELETE) {
-				printf("file deleted: %u %s\n", dp->mfs_d_ino, user_pathCopy);
+				// printf("file deleted: %u %s\n", dp->mfs_d_ino, user_path);
 				// printf("file deleted: %u\n", dp->mfs_d_ino);
 				/* Save d_ino for recovery. */
 				t = MFS_NAME_MAX - sizeof(ino_t);
