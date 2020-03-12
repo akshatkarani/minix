@@ -61,7 +61,7 @@ int fs_lookup()
 
   /* Verify this is a null-terminated path. */
   if(user_path[len - 1] != '\0') return(EINVAL);
-  
+
   memset(&credentials, 0, sizeof(credentials));
   if(!(flags & PATH_GET_UCRED)) { /* Do we have to copy uid/gid credentials? */
         caller_uid	= fs_m_in.m_vfs_fs_lookup.uid;
@@ -103,7 +103,7 @@ int fs_lookup()
   fs_m_out.m_fs_vfs_lookup.symloop		= symlinks;
   fs_m_out.m_fs_vfs_lookup.uid			= rip->i_uid;
   fs_m_out.m_fs_vfs_lookup.gid			= rip->i_gid;
-
+  
   /* This is only valid for block and character specials. But it doesn't
    * cause any harm to always set the device field. */
   fs_m_out.m_fs_vfs_lookup.device		= (dev_t) rip->i_zone[0];

@@ -841,7 +841,7 @@ static int req_readwrite_actual(endpoint_t fs_e, ino_t inode_nr, off_t pos,
 			     (rw_flag==READING ? CPF_WRITE:CPF_READ) | cpflag);
   if (grant_id == -1)
 	  panic("req_readwrite: cpf_grant_magic failed");
-  
+
   /* Fill in request message */
   m.m_type = rw_flag == READING ? REQ_READ : REQ_WRITE;
   m.m_vfs_fs_readwrite.inode = inode_nr;
@@ -852,9 +852,6 @@ static int req_readwrite_actual(endpoint_t fs_e, ino_t inode_nr, off_t pos,
   }
   m.m_vfs_fs_readwrite.nbytes = num_of_bytes;
 
-  // if (rw_flag == WRITING) {
-	//   printf("file written: %llu; nbytes = %zu; offset = %llu\n", inode_nr, num_of_bytes, pos);
-  // }
   /* Send/rec request */
   r = fs_sendrec(fs_e, &m);
   cpf_revoke(grant_id);
