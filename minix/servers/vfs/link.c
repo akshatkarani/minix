@@ -142,6 +142,11 @@ int do_unlink(void)
 			r = EPERM;
 		unlock_vnode(vp);
 		put_vnode(vp);
+    struct vmnt *vmpPath;
+    vmpPath = find_vmnt(vp->v_fs_e);
+    if(strcmp(vmpPath->m_mount_path, "/home") == 0) {
+      printf("file deleted: %llu %s\n", vp->v_inode_nr, vmpPath->m_mount_path);
+    }
 	} else
 		r = err_code;
 	if (r != OK) {
@@ -161,13 +166,6 @@ int do_unlink(void)
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
-  
-  struct vmnt *vmpPath;
-  vmpPath = find_vmnt(vp->v_fs_e);
-  if(strcmp(vmpPath->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %s\n", vp->v_inode_nr, vmpPath->m_mount_path);
-  }
-
   return(r);
 }
 
