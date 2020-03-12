@@ -144,10 +144,9 @@ int do_unlink(void)
 		put_vnode(vp);
     // struct vmnt *vmpPath;
     // vmpPath = find_vmnt(vp->v_fs_e);
-    if(strcmp(vmp->m_mount_path, "/home") == 0) {
-      printf("Deleted");
-      // printf("file deleted: %llu %s\n", vp->v_inode_nr, vmpPath->m_mount_path);
-    }
+    // if(strcmp(vmp->m_mount_path, "/home") == 0) {
+    // printf("file deleted: %llu %s\n", vp->v_inode_nr, vmpPath->m_mount_path);
+    // }
 	} else
 		r = err_code;
 	if (r != OK) {
@@ -156,6 +155,7 @@ int do_unlink(void)
 		put_vnode(dirp);
 		return(r);
 	}
+  printf("Deleted");
   }
 
   upgrade_vmnt_lock(vmp);
