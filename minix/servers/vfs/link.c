@@ -136,13 +136,10 @@ int do_unlink(void)
 	stickycheck.l_vmnt_lock = VMNT_READ;
 	stickycheck.l_vnode_lock = VNODE_READ;
 	vp = advance(dirp, &stickycheck, fp);
-  // if (strcmp(vmp->m_mount_path, "/home") == 0) {
-  // }
 	assert(vmp2 == NULL);
 	if (vp != NULL) {
 		if (vp->v_uid != fp->fp_effuid && fp->fp_effuid != SU_UID)
 			r = EPERM;
-    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
     unlock_vnode(vp);
     put_vnode(vp);
 	} else
@@ -161,29 +158,19 @@ int do_unlink(void)
   stickycheck.l_vmnt_lock = VMNT_READ;
   stickycheck.l_vnode_lock = VNODE_READ;
   vp = advance(dirp, &stickycheck, fp);
-  if (vp != NULL) {
+  
+  if (strcmp(vmp->m_mount_path, "/home") == 0) {
     printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
-    unlock_vnode(vp);
-    put_vnode(vp);
-	}
+  }
 
   if (job_call_nr == VFS_UNLINK) {
     r = req_unlink(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
-    if (strcmp(vmp->m_mount_path, "/home") == 0) {
-      printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
-    }
   }
   else
 	  r = req_rmdir(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
-  if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
-  }
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
-  if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
-  }
   return(r);
 }
 
