@@ -155,7 +155,6 @@ int do_unlink(void)
 		put_vnode(dirp);
 		return(r);
 	}
-  printf("Deleted");
   }
 
   upgrade_vmnt_lock(vmp);
@@ -167,6 +166,7 @@ int do_unlink(void)
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
+  printf("Deleted");
   return(r);
 }
 
