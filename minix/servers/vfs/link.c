@@ -162,7 +162,7 @@ int do_unlink(void)
   unlock_vmnt(vmp);
   put_vnode(dirp);
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu %llu\n", vp->v_inode_nr, dirp_l->v_inode_nr, dirp->v_inode_nr);
+    printf("file deleted: %llu %llu %llu %llu\n", vp->v_inode_nr, dirp_l->v_inode_nr, dirp->v_inode_nr, vp->v_mapinode_nr);
   }
   return(r);
 }
