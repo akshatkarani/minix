@@ -140,13 +140,10 @@ int do_unlink(void)
 	if (vp != NULL) {
 		if (vp->v_uid != fp->fp_effuid && fp->fp_effuid != SU_UID)
 			r = EPERM;
-    printf("1 file deleted: %llu\n", vp->v_inode_nr);
-		unlock_vnode(vp);
-    printf("2 file deleted: %llu\n", vp->v_inode_nr);
-		put_vnode(vp);
+    unlock_vnode(vp);
+    put_vnode(vp);
 	} else
 		r = err_code;
-    printf("3 file deleted: %llu\n", vp->v_inode_nr);
 	if (r != OK) {
 		unlock_vnode(dirp);
 		unlock_vmnt(vmp);
@@ -165,7 +162,7 @@ int do_unlink(void)
   unlock_vmnt(vmp);
   put_vnode(dirp);
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu\n", vp->v_inode_nr);
+    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
   }
   return(r);
 }
