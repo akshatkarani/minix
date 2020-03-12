@@ -140,8 +140,8 @@ int do_unlink(void)
 	if (vp != NULL) {
 		if (vp->v_uid != fp->fp_effuid && fp->fp_effuid != SU_UID)
 			r = EPERM;
-    unlock_vnode(vp);
-    put_vnode(vp);
+            unlock_vnode(vp);
+            put_vnode(vp);
 	} else
 		r = err_code;
 	if (r != OK) {
