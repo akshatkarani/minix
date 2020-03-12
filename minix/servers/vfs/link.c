@@ -138,6 +138,11 @@ int do_unlink(void)
 	vp = advance(dirp, &stickycheck, fp);
 	assert(vmp2 == NULL);
 	if (vp != NULL) {
+    struct vmnt *vmpPath;
+    vmpPath = find_vmnt(vp->v_fs_e);
+    if(strcmp(vmpPath->m_mount_path, "/home") == 0) {
+      printf("file deleted: %llu %s\n", vp->v_inode_nr, vmp->m_mount_path);
+    }
 		if (vp->v_uid != fp->fp_effuid && fp->fp_effuid != SU_UID)
 			r = EPERM;
 		unlock_vnode(vp);
@@ -151,13 +156,6 @@ int do_unlink(void)
 		return(r);
 	}
   }
-
-  struct vmnt *vmpPath;
-  vmpPath = find_vmnt(vp->v_fs_e);
-  if(strcmp(vmpPath->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %s\n", vp->v_inode_nr, vmp->m_mount_path);
-  }
-  
 
   upgrade_vmnt_lock(vmp);
 
