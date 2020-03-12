@@ -133,6 +133,7 @@ int do_unlink(void)
   if ((dirp->v_mode & S_ISVTX) == S_ISVTX) {
 	/* Look up inode of file to unlink to retrieve owner */
 	lookup_init(&stickycheck, resolve.l_path, PATH_RET_SYMLINK, &vmp2, &vp);
+  printf("Vnode: %llu", vp->v_inode_nr);
 	stickycheck.l_vmnt_lock = VMNT_READ;
 	stickycheck.l_vnode_lock = VNODE_READ;
 	vp = advance(dirp, &stickycheck, fp);
@@ -162,7 +163,7 @@ int do_unlink(void)
   unlock_vmnt(vmp);
   put_vnode(dirp);
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu %llu %llu\n", vp->v_inode_nr, dirp_l->v_inode_nr, dirp->v_inode_nr, vp->v_mapinode_nr);
+    printf("file deleted: %llu %llu\n", vp->v_inode_nr, vp->v_mapinode_nr);
   }
   return(r);
 }
