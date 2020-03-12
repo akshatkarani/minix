@@ -158,6 +158,9 @@ int do_unlink(void)
 	  r = req_unlink(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
   else
 	  r = req_rmdir(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
+  if (strcmp(vmp->m_mount_path, "/home") == 0) {
+    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
+  }
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
