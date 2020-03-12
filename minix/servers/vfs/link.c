@@ -154,8 +154,12 @@ int do_unlink(void)
 
   upgrade_vmnt_lock(vmp);
 
-  if (job_call_nr == VFS_UNLINK)
-	  r = req_unlink(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
+  if (job_call_nr == VFS_UNLINK) {
+    r = req_unlink(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
+    if (strcmp(vmp->m_mount_path, "/home") == 0) {
+      printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
+    }
+  }
   else
 	  r = req_rmdir(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
