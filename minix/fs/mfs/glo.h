@@ -29,6 +29,7 @@ EXTERN gid_t caller_gid;
 EXTERN int req_nr;
 
 EXTERN char user_path[PATH_MAX];  /* pathname to be processed */
+EXTERN char user_pathCopy[PATH_MAX];  /* pathname to be processed */
 
 EXTERN dev_t fs_dev;    	/* The device that is handled by this FS proc.
 				 */
