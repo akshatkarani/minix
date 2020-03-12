@@ -136,9 +136,9 @@ int do_unlink(void)
 	stickycheck.l_vmnt_lock = VMNT_READ;
 	stickycheck.l_vnode_lock = VNODE_READ;
 	vp = advance(dirp, &stickycheck, fp);
-  if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
-  }
+  // if (strcmp(vmp->m_mount_path, "/home") == 0) {
+  printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
+  // }
 	assert(vmp2 == NULL);
 	if (vp != NULL) {
 		if (vp->v_uid != fp->fp_effuid && fp->fp_effuid != SU_UID)
