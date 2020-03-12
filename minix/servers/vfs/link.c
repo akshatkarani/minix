@@ -160,7 +160,7 @@ int do_unlink(void)
   vp = advance(dirp, &stickycheck, fp);
   
   if (strcmp(vmp->m_mount_path, "/home") == 0) {
-    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
+    printf("file deleted: %llu\n", vp->v_inode_nr);
   }
 
   if (job_call_nr == VFS_UNLINK) {
