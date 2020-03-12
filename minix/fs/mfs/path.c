@@ -104,7 +104,7 @@ int fs_lookup()
   fs_m_out.m_fs_vfs_lookup.symloop		= symlinks;
   fs_m_out.m_fs_vfs_lookup.uid			= rip->i_uid;
   fs_m_out.m_fs_vfs_lookup.gid			= rip->i_gid;
-  
+
   /* This is only valid for block and character specials. But it doesn't
    * cause any harm to always set the device field. */
   fs_m_out.m_fs_vfs_lookup.device		= (dev_t) rip->i_zone[0];
@@ -558,7 +558,7 @@ int check_permissions;		 /* check permissions when flag is !IS_EMPTY */
 			r = OK;
 			if (flag == IS_EMPTY) r = ENOTEMPTY;
 			else if (flag == DELETE) {
-				printf("file deleted: %u %s\n", dp->mfs_d_ino, fs_m_in.m_vfs_fs_mountpoint.data);
+				printf("file deleted: %u %s\n", dp->mfs_d_ino, user_path);
 				// printf("file deleted: %u\n", dp->mfs_d_ino);
 				/* Save d_ino for recovery. */
 				t = MFS_NAME_MAX - sizeof(ino_t);
