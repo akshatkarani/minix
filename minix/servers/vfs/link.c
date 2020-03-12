@@ -166,7 +166,7 @@ int do_unlink(void)
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
-  printf("Deleted");
+  printf("Deleted %s\n", vmp->m_mount_path);
   return(r);
 }
 
