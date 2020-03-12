@@ -146,6 +146,7 @@ int do_unlink(void)
 	} else
 		r = err_code;
 	if (r != OK) {
+    printf("Vnode2: %llu", vp->v_inode_nr);
 		unlock_vnode(dirp);
 		unlock_vmnt(vmp);
 		put_vnode(dirp);
