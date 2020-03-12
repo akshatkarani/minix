@@ -166,7 +166,9 @@ int do_unlink(void)
   unlock_vnode(dirp);
   unlock_vmnt(vmp);
   put_vnode(dirp);
-  printf("Deleted %s\n", vmp->m_mount_path);
+  if (strcmp(vmp->m_mount_path, "/home") == 0) {
+    printf("Deleted %llu %s\n", vp->v_inode_nr, vmp->m_mount_path);
+  }
   return(r);
 }
 
