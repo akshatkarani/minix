@@ -157,6 +157,16 @@ int do_unlink(void)
 
   upgrade_vmnt_lock(vmp);
 
+  lookup_init(&stickycheck, resolve.l_path, PATH_RET_SYMLINK, &vmp2, &vp);
+  stickycheck.l_vmnt_lock = VMNT_READ;
+  stickycheck.l_vnode_lock = VNODE_READ;
+  vp = advance(dirp, &stickycheck, fp);
+  if (vp != NULL) {
+    printf("file deleted: %llu %llu\n", vp->v_inode_nr, dirp->v_inode_nr);
+    unlock_vnode(vp);
+    put_vnode(vp);
+	}
+
   if (job_call_nr == VFS_UNLINK) {
     r = req_unlink(dirp->v_fs_e, dirp->v_inode_nr, fullpath);
     if (strcmp(vmp->m_mount_path, "/home") == 0) {
