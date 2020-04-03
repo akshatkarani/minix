@@ -105,7 +105,7 @@ int fs_readwrite(void)
       {
         char tmp[40];
         register int i;
-        register struct buf *bp;
+        register struct bufd *bp;
         
         for(i = 0; i < f_size; i++)
         {

@@ -17,7 +17,7 @@ typedef struct {		/* V2.x disk inode */
 } d2_inode;
 
 
-struct buf {
+struct bufd {
   /* Data portion of the buffer. */
   union fsdata_u *bp;
 
