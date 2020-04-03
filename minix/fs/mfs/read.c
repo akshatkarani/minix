@@ -89,7 +89,7 @@ int fs_readwrite(void)
 		return EROFS;
 	      
   cum_io = 0;
-    char immed_buff[41];
+    char immed_buff[33];
 
 	/********************start************************/
 
