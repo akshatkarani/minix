@@ -112,7 +112,6 @@ int fs_readwrite(void)
 	 */
 
 	if ((rip->i_mode & I_TYPE) == I_IMMEDIATE) {
-		printf("Mountpoint: %c\n", rip->i_mountpoint);
 		// printf(
 		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
 		// 		f_size + nrbytes, position, f_size, nrbytes);
