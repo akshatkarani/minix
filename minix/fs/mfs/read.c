@@ -97,7 +97,7 @@ int fs_readwrite(void)
 		// printf(
 		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
 		// 		f_size + nrbytes, position, f_size, nrbytes);
-		int is_immediate;
+		int is_immediate = 0;
 		int i;
 
 		if (rw_flag == WRITING) {
@@ -135,8 +135,8 @@ int fs_readwrite(void)
 					// same as after rw_chunk is called
 					position += f_size;
 					f_size = rip->i_size;
-					rip->i_mode = I_REGULAR;
-					is_immediate = 0;
+					rip->i_mode = (I_REGULAR | (rip->i_mode & ALL_MODES));
+					// is_immediate = 0;
 				}
 			} else {
 				is_immediate = 1;
@@ -159,12 +159,12 @@ int fs_readwrite(void)
 
 		if (is_immediate == 1) {
 			printf("Read or write from Immediate\n");
-			unsigned buf_off;		/* offset in grant */
+			// unsigned buf_off;		/* offset in grant */
 			if (rw_flag == READING) {
-				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
+				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) cum_io,
 						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
 			} else {
-				r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
+				r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) cum_io,
 						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
 				IN_MARKDIRTY(rip);
 			}
