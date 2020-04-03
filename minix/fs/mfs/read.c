@@ -176,7 +176,7 @@ int fs_readwrite(void)
 			for (int i = 0; i < f_size; i++) {
 				immed_buff[i] = *(((char *) rip->i_zone) + i);
 			}
-			printf(immed_buff);
+			printf("%s\n", immed_buff);
 		}
 	}
 	/***********end************/
