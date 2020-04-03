@@ -18,7 +18,7 @@ static struct buf *rahead(struct inode *rip, block_t baseblock, u64_t
 static int rw_chunk(struct inode *rip, u64_t position, unsigned off,
 	size_t chunk, unsigned left, int rw_flag, cp_grant_id_t gid, unsigned
 	buf_off, unsigned int block_size, int *completed);
-struct int rw_immed(struct inode *rip, unsigned off,
+static int rw_immed(struct inode *rip, unsigned off,
   size_t chunk, int rw_flag, cp_grant_id_t gid, unsigned buf_off);
 
 /*===========================================================================*
@@ -115,7 +115,7 @@ int fs_readwrite(void)
         /* clear inode since it will now hold pointers rather than data (copied from wipe_inode()) */
         rip->i_size = 0;
         rip->i_update = ATIME | CTIME | MTIME;	/* update all times later */
-        rip->i_dirt = DIRTY;
+        rip->i_dirt = IN_DIRTY;
         for (i = 0; i < V2_NR_TZONES; i++) rip->i_zone[i] = NO_ZONE;
         
         /* Writing to a nonexistent block. Create and enter in inode.*/
@@ -125,10 +125,10 @@ int fs_readwrite(void)
     		/* copy data to bp->data */
     		for(i = 0; i < f_size; i++)
         {
-          bp->b_data[i] = tmp[i];
+          bp->data[i] = tmp[i];
         }
     		
-        bp->b_dirt = DIRTY;
+        bp->b_dirt = IN_DIRTY;
     		
         put_block(bp, PARTIAL_DATA_BLOCK);	
     		
@@ -417,13 +417,13 @@ unsigned buf_off;		/* offset in grant */
   if(rw_flag == READING)
   {
     r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-           (vir_bytes) (rip->i_zone+off), (size_t) chunk, D);
+           (vir_bytes) (rip->i_zone+off), (size_t) chunk, 1);
   }
   else
   {
     r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-             (vir_bytes) (rip->i_zone+off), (size_t) chunk, D);
-    rip->i_dirt = DIRTY;
+             (vir_bytes) (rip->i_zone+off), (size_t) chunk, 1);
+    rip->i_dirt = IN_DIRTY;
   }
   
   return(r);
