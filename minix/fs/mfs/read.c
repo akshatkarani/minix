@@ -94,7 +94,7 @@ int fs_readwrite(void)
 	/********************start************************/
 
 	/*
-	 * If mode is immediate and the file-size exceeds 40 bytes then make the file regular
+	 * If mode is immediate and the file-size exceeds 32 bytes then make the file regular
 	 * to make the file regular and the rw_flag is writing
 	 *
 	 * 1. copy the contents of the zones into a temporary array
@@ -120,8 +120,8 @@ int fs_readwrite(void)
 		int i;
 
 		if (rw_flag == WRITING) {
-			if ((f_size + nrbytes) > 40) {
-				if (position == 0 && nrbytes <= 40) {
+			if ((f_size + nrbytes) > 32) {
+				if (position == 0 && nrbytes <= 32) {
 					printf("file is still immediate\n");
 					is_immediate = 1;
 				} else {
@@ -196,7 +196,7 @@ int fs_readwrite(void)
 			for (int i = 0; i < f_size; i++) {
 				immed_buff[i] = *(((char *) rip->i_zone) + i);
 			}
-			printf("immedbuf: %s\n", immed_buff);
+			// printf("immedbuf: %s\n", immed_buff);
 		}
 	}
 	/***********end************/
@@ -253,28 +253,6 @@ int fs_readwrite(void)
   
   return(r);
 }
-
-// int is_immeditate(rip)
-// 	register struct inode *rip; {
-// 	if (rip->i_size <= 40) {
-// 		printf("%d\n", rip->i_size);
-// 		printf("%d\n", rip->i_mode);
-// 		printf("%d\n", rip->i_nlinks);
-// 		printf("%d\n", rip->i_uid);
-// 		printf("%d\n", rip->i_gid);
-// 		printf("%d\n", rip->i_dev);
-// 		printf("%d\n", rip->i_num);
-// 		printf("%d\n", rip->i_count);
-// 		printf("%d\n", rip->i_ndzones);
-
-// 		for (int i = 0; i < V2_NR_TZONES; i++) {
-// 			printf("%d %s\n", i, rip->i_zone[i]);
-// 		}
-// 		printf("The File is eligible to be immediate\n");
-// 		return 1;
-// 	}
-// 	return 0;
-// }
 
 /*===========================================================================*
  *				fs_breadwrite				     *
