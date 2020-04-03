@@ -1,7 +1,7 @@
 #ifndef __MFS_TYPE_H__
 #define __MFS_TYPE_H__
 
-#include <minix/libminixfs.h>
+// #include <minix/libminixfs.h>
 
 /* Declaration of the V2 inode as it is on the disk (not in core). */
 typedef struct {		/* V2.x disk inode */
