@@ -125,7 +125,7 @@ int fs_readwrite(void)
     		/* copy data to bp->data */
     		for(i = 0; i < f_size; i++)
         {
-          bp->data[i] = tmp[i];
+          bp->b_data[i] = tmp[i];
         }
     		
         bp->b_dirt = IN_DIRTY;
@@ -417,12 +417,12 @@ unsigned buf_off;		/* offset in grant */
   if(rw_flag == READING)
   {
     r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-           (vir_bytes) (rip->i_zone+off), (size_t) chunk, 1);
+           (vir_bytes) (rip->i_zone+off), (size_t) chunk);
   }
   else
   {
     r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-             (vir_bytes) (rip->i_zone+off), (size_t) chunk, 1);
+             (vir_bytes) (rip->i_zone+off), (size_t) chunk);
     rip->i_dirt = IN_DIRTY;
   }
   
