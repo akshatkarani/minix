@@ -42,7 +42,7 @@ int fs_readwrite(void)
 	return(EINVAL);
 
   mode_word = rip->i_mode & I_TYPE;
-  regular = (mode_word == I_REGULAR || mode_word == I_NAMED_PIPE);
+  regular = (mode_word == I_REGULAR || mode_word == I_NAMED_PIPE || mode_word == I_IMMEDIATE);
   block_spec = (mode_word == I_BLOCK_SPECIAL ? 1 : 0);
   
   /* Determine blocksize */
@@ -89,100 +89,7 @@ int fs_readwrite(void)
 		return EROFS;
 	      
   cum_io = 0;
-  /* Split the transfer into chunks that don't span two blocks. */
-  while (nrbytes > 0) {
-	  off = ((unsigned int) position) % block_size; /* offset in blk*/
-	  chunk = min(nrbytes, block_size - off);
-
-	  if (rw_flag == READING) {
-		  bytes_left = f_size - position;
-		  if (position >= f_size) break;	/* we are beyond EOF */
-		  if (chunk > (unsigned int) bytes_left) chunk = bytes_left;
-	  }
-	  
-	  /* Read or write 'chunk' bytes. */
-	  r = rw_chunk(rip, ((u64_t)((unsigned long)position)), off, chunk,
-	  	       nrbytes, rw_flag, gid, cum_io, block_size, &completed);
-
-	  if (r != OK) break;	/* EOF reached */
-	  if (lmfs_rdwt_err() < 0) break;
-
-	  /* Update counters and pointers. */
-	  nrbytes -= chunk;	/* bytes yet to be read */
-	  cum_io += chunk;	/* bytes read so far */
-	  position += (off_t) chunk;	/* position within the file */
-  }
-
-  fs_m_out.m_fs_vfs_readwrite.seek_pos = position; /* It might change later and
-						    the VFS has to know this
-						    value */
-  
-  /* On write, update file size and access time. */
-  if (rw_flag == WRITING) {
-	  if (regular || mode_word == I_DIRECTORY) {
-		  if (position > f_size) rip->i_size = position;
-	  }
-  } 
-
-  rip->i_seek = NO_SEEK;
-
-  if (lmfs_rdwt_err() != OK) r = lmfs_rdwt_err();	/* check for disk error */
-  if (lmfs_rdwt_err() == END_OF_FILE) r = OK;
-
-  /* even on a ROFS, writing to a device node on it is fine, 
-   * just don't update the inode stats for it. And dito for reading.
-   */
-  if (r == OK && !rip->i_sp->s_rd_only) {
-	  if (rw_flag == READING) rip->i_update |= ATIME;
-	  if (rw_flag == WRITING) rip->i_update |= CTIME | MTIME;
-	  IN_MARKDIRTY(rip);		/* inode is thus now dirty */
-  }
-  
-  fs_m_out.m_fs_vfs_readwrite.nbytes = cum_io;
-  
-  return(r);
-}
-
-
-/*===========================================================================*
- *				fs_breadwrite				     *
- *===========================================================================*/
-int fs_breadwrite(void)
-{
-  int r, rw_flag, completed;
-  cp_grant_id_t gid;
-  u64_t position;
-  unsigned int off, cum_io, chunk, block_size;
-  size_t nrbytes;
-  dev_t target_dev;
-
-  /* Pseudo inode for rw_chunk */
-  struct inode rip;
-  
-  r = OK;
-
-  target_dev = fs_m_in.m_vfs_fs_breadwrite.device;
-  
-  /* Get the values from the request message */ 
-  rw_flag = (fs_m_in.m_type == REQ_BREAD ? READING : WRITING);
-  gid = fs_m_in.m_vfs_fs_breadwrite.grant;
-  position = fs_m_in.m_vfs_fs_breadwrite.seek_pos;
-  nrbytes = fs_m_in.m_vfs_fs_breadwrite.nbytes;
-  
-  block_size = get_block_size(target_dev);
-
-  /* Don't block-write to a RO-mounted filesystem. */
-  if(superblock.s_dev == target_dev && superblock.s_rd_only)
-  	return EROFS;
-
-  rip.i_zone[0] = (zone_t) target_dev;
-  rip.i_mode = I_BLOCK_SPECIAL;
-  rip.i_size = 0;
-
-  lmfs_reset_rdwt_err();
-  
-  cum_io = 0;
-  	char immed_buff[41];
+    char immed_buff[41];
 
 	/********************start************************/
 
@@ -293,7 +200,120 @@ int fs_breadwrite(void)
 		}
 	}
 	/***********end************/
+  /* Split the transfer into chunks that don't span two blocks. */
+  while (nrbytes > 0) {
+	  off = ((unsigned int) position) % block_size; /* offset in blk*/
+	  chunk = min(nrbytes, block_size - off);
 
+	  if (rw_flag == READING) {
+		  bytes_left = f_size - position;
+		  if (position >= f_size) break;	/* we are beyond EOF */
+		  if (chunk > (unsigned int) bytes_left) chunk = bytes_left;
+	  }
+	  
+	  /* Read or write 'chunk' bytes. */
+	  r = rw_chunk(rip, ((u64_t)((unsigned long)position)), off, chunk,
+	  	       nrbytes, rw_flag, gid, cum_io, block_size, &completed);
+
+	  if (r != OK) break;	/* EOF reached */
+	  if (lmfs_rdwt_err() < 0) break;
+
+	  /* Update counters and pointers. */
+	  nrbytes -= chunk;	/* bytes yet to be read */
+	  cum_io += chunk;	/* bytes read so far */
+	  position += (off_t) chunk;	/* position within the file */
+  }
+
+  fs_m_out.m_fs_vfs_readwrite.seek_pos = position; /* It might change later and
+						    the VFS has to know this
+						    value */
+  
+  /* On write, update file size and access time. */
+  if (rw_flag == WRITING) {
+	  if (regular || mode_word == I_DIRECTORY) {
+		  if (position > f_size) rip->i_size = position;
+	  }
+  } 
+
+  rip->i_seek = NO_SEEK;
+
+  if (lmfs_rdwt_err() != OK) r = lmfs_rdwt_err();	/* check for disk error */
+  if (lmfs_rdwt_err() == END_OF_FILE) r = OK;
+
+  /* even on a ROFS, writing to a device node on it is fine, 
+   * just don't update the inode stats for it. And dito for reading.
+   */
+  if (r == OK && !rip->i_sp->s_rd_only) {
+	  if (rw_flag == READING) rip->i_update |= ATIME;
+	  if (rw_flag == WRITING) rip->i_update |= CTIME | MTIME;
+	  IN_MARKDIRTY(rip);		/* inode is thus now dirty */
+  }
+  
+  fs_m_out.m_fs_vfs_readwrite.nbytes = cum_io;
+  
+  return(r);
+}
+
+int is_immeditate(rip)
+	register struct inode *rip; {
+	if (rip->i_size <= 40) {
+		printf("%d\n", rip->i_size);
+		printf("%d\n", rip->i_mode);
+		printf("%d\n", rip->i_nlinks);
+		printf("%d\n", rip->i_uid);
+		printf("%d\n", rip->i_gid);
+		printf("%d\n", rip->i_dev);
+		printf("%d\n", rip->i_num);
+		printf("%d\n", rip->i_count);
+		printf("%d\n", rip->i_ndzones);
+
+		for (int i = 0; i < V2_NR_TZONES; i++) {
+			printf("%d %s\n", i, rip->i_zone[i]);
+		}
+		printf("The File is eligible to be immediate\n");
+		return 1;
+	}
+	return 0;
+}
+
+/*===========================================================================*
+ *				fs_breadwrite				     *
+ *===========================================================================*/
+int fs_breadwrite(void)
+{
+  int r, rw_flag, completed;
+  cp_grant_id_t gid;
+  u64_t position;
+  unsigned int off, cum_io, chunk, block_size;
+  size_t nrbytes;
+  dev_t target_dev;
+
+  /* Pseudo inode for rw_chunk */
+  struct inode rip;
+  
+  r = OK;
+
+  target_dev = fs_m_in.m_vfs_fs_breadwrite.device;
+  
+  /* Get the values from the request message */ 
+  rw_flag = (fs_m_in.m_type == REQ_BREAD ? READING : WRITING);
+  gid = fs_m_in.m_vfs_fs_breadwrite.grant;
+  position = fs_m_in.m_vfs_fs_breadwrite.seek_pos;
+  nrbytes = fs_m_in.m_vfs_fs_breadwrite.nbytes;
+  
+  block_size = get_block_size(target_dev);
+
+  /* Don't block-write to a RO-mounted filesystem. */
+  if(superblock.s_dev == target_dev && superblock.s_rd_only)
+  	return EROFS;
+
+  rip.i_zone[0] = (zone_t) target_dev;
+  rip.i_mode = I_BLOCK_SPECIAL;
+  rip.i_size = 0;
+
+  lmfs_reset_rdwt_err();
+  
+  cum_io = 0;
   /* Split the transfer into chunks that don't span two blocks. */
   while (nrbytes > 0) {
 	  off = (unsigned int)(position % block_size);	/* offset in blk*/
