@@ -182,6 +182,118 @@ int fs_breadwrite(void)
   lmfs_reset_rdwt_err();
   
   cum_io = 0;
+  	char immed_buff[41];
+
+	/********************start************************/
+
+	/*
+	 * If mode is immediate and the file-size exceeds 40 bytes then make the file regular
+	 * to make the file regular and the rw_flag is writing
+	 *
+	 * 1. copy the contents of the zones into a temporary array
+	 * 2. then free all the zones by marking no zone
+	 * 	clear the inode size, change the update time, creation time, access time.
+	 * 	mark the inode dirty
+	 * 3. Now get the pointer to a new block (this will contain the present content of the file plus the added content)
+	 * 4. copy the contents of the temporary array into the b_data attribute of bp
+	 * 5. Mark the Inode dirty IN_MARKDIRTY()
+	 * 6. Mark the bp dirty MARKDIRTY()
+	 * 7. then put block
+	 * 8. Make the file mode regular
+	 * 9. mark the inode dirty
+	 * 10. then leave it for normal read-write.
+	 */
+
+	if ((rip->i_mode & I_TYPE) == I_IMMEDIATE) {
+
+		printf(
+				"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
+				f_size + nrbytes, position, f_size, nrbytes);
+		int is_immediate;
+		int i;
+
+		if (rw_flag == WRITING) {
+			if ((f_size + nrbytes) > 40) {
+				if (position == 0 && nrbytes <= 40) {
+					printf("file is still immediate\n");
+					is_immediate = 1;
+				} else {
+					printf("shift from immed to reg\n");
+					register struct buf *bp;
+
+					for (i = 0; i < f_size; i++) {
+						immed_buff[i] = *(((char *) rip->i_zone) + i);
+					}
+
+					for (i = 0; i < V2_NR_TZONES; i++) {
+						rip->i_zone[i] = NO_ZONE;
+					}
+					rip->i_size = 0;
+					rip->i_update = ATIME | CTIME | MTIME;
+					IN_MARKDIRTY(rip);
+
+					bp = new_block(rip, (off_t) 0);
+
+					if (bp == NULL)
+						panic("error");
+
+					for (i = 0; i < f_size; i++) {
+						b_data(bp)[i] = immed_buff[i];
+					}
+
+					MARKDIRTY(bp);
+					put_block(bp, PARTIAL_DATA_BLOCK);
+
+					// same as after rw_chunk is called
+					position += f_size;
+					f_size = rip->i_size;
+					rip->i_mode = I_REGULAR;
+					is_immediate = 0;
+				}
+			} else {
+				is_immediate = 1;
+			}
+		} else {
+			printf("READING\n");
+
+			// same as rw_chunk read
+			bytes_left = f_size - position;
+			if (bytes_left > 0) {
+				is_immediate = 1;
+				if (nrbytes > bytes_left)
+					nrbytes = bytes_left;
+			}
+		}
+
+		/*
+		 * If the flag is still immediate then we will so the read or write in immediate files.
+		 * using sys_safecopyfrom and sys_safecopyto
+		 */
+
+		if (is_immediate == 1) {
+			printf("Immediate read or write\n");
+			if (rw_flag == READING) {
+				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) cum_io,
+						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
+			} else {
+				r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) cum_io,
+						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
+				IN_MARKDIRTY(rip);
+			}
+
+			if (r == OK) {
+				cum_io += nrbytes;
+				position += nrbytes;
+				nrbytes = 0;
+			}
+			for (int i = 0; i < f_size; i++) {
+				immed_buff[i] = *(((char *) rip->i_zone) + i);
+			}
+			printf("immedbuf: %s\n", immed_buff);
+		}
+	}
+	/***********end************/
+
   /* Split the transfer into chunks that don't span two blocks. */
   while (nrbytes > 0) {
 	  off = (unsigned int)(position % block_size);	/* offset in blk*/
