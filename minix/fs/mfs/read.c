@@ -105,7 +105,7 @@ int fs_readwrite(void)
       {
         char tmp[40];
         register int i;
-        register struct bufd *bp;
+        register struct buf *bp;
         
         for(i = 0; i < f_size; i++)
         {
@@ -125,7 +125,8 @@ int fs_readwrite(void)
     		/* copy data to bp->data */
     		for(i = 0; i < f_size; i++)
         {
-          bp->b_data[i] = tmp[i];
+          b_data(bp)[i] = tmp[i];
+          // bp->b_data[i] = tmp[i];
         }
     		// lmfs_markdirty(bp);
         bp->b_dirt = IN_DIRTY;
