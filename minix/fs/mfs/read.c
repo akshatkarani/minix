@@ -159,11 +159,12 @@ int fs_readwrite(void)
 
 		if (is_immediate == 1) {
 			printf("Read or write from Immediate\n");
+			unsigned buf_off;		/* offset in grant */
 			if (rw_flag == READING) {
-				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) cum_io,
+				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
 						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
 			} else {
-				r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) cum_io,
+				r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
 						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
 				IN_MARKDIRTY(rip);
 			}
@@ -173,10 +174,10 @@ int fs_readwrite(void)
 				position += nrbytes;
 				nrbytes = 0;
 			}
-			for (int i = 0; i < f_size; i++) {
-				immed_buff[i] = *(((char *) rip->i_zone) + i);
-			}
-			printf("%s\n", immed_buff);
+			// for (int i = 0; i < f_size; i++) {
+			// 	immed_buff[i] = *(((char *) rip->i_zone) + i);
+			// }
+			// printf("%s\n", immed_buff);
 		}
 	}
 	/***********end************/
