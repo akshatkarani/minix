@@ -127,8 +127,8 @@ int fs_readwrite(void)
         {
           bp->b_data[i] = tmp[i];
         }
-    		
-        bp->b_dirt = IN_DIRTY;
+    		lmfs_markdirty(bp);
+        // bp->b_dirt = IN_DIRTY;
     		
         put_block(bp, PARTIAL_DATA_BLOCK);	
     		
