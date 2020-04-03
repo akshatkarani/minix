@@ -113,9 +113,9 @@ int fs_readwrite(void)
 
 	if ((rip->i_mode & I_TYPE) == I_IMMEDIATE) {
 
-		printf(
-				"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
-				f_size + nrbytes, position, f_size, nrbytes);
+		// printf(
+		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
+		// 		f_size + nrbytes, position, f_size, nrbytes);
 		int is_immediate;
 		int i;
 
@@ -254,27 +254,27 @@ int fs_readwrite(void)
   return(r);
 }
 
-int is_immeditate(rip)
-	register struct inode *rip; {
-	if (rip->i_size <= 40) {
-		printf("%d\n", rip->i_size);
-		printf("%d\n", rip->i_mode);
-		printf("%d\n", rip->i_nlinks);
-		printf("%d\n", rip->i_uid);
-		printf("%d\n", rip->i_gid);
-		printf("%d\n", rip->i_dev);
-		printf("%d\n", rip->i_num);
-		printf("%d\n", rip->i_count);
-		printf("%d\n", rip->i_ndzones);
+// int is_immeditate(rip)
+// 	register struct inode *rip; {
+// 	if (rip->i_size <= 40) {
+// 		printf("%d\n", rip->i_size);
+// 		printf("%d\n", rip->i_mode);
+// 		printf("%d\n", rip->i_nlinks);
+// 		printf("%d\n", rip->i_uid);
+// 		printf("%d\n", rip->i_gid);
+// 		printf("%d\n", rip->i_dev);
+// 		printf("%d\n", rip->i_num);
+// 		printf("%d\n", rip->i_count);
+// 		printf("%d\n", rip->i_ndzones);
 
-		for (int i = 0; i < V2_NR_TZONES; i++) {
-			printf("%d %s\n", i, rip->i_zone[i]);
-		}
-		printf("The File is eligible to be immediate\n");
-		return 1;
-	}
-	return 0;
-}
+// 		for (int i = 0; i < V2_NR_TZONES; i++) {
+// 			printf("%d %s\n", i, rip->i_zone[i]);
+// 		}
+// 		printf("The File is eligible to be immediate\n");
+// 		return 1;
+// 	}
+// 	return 0;
+// }
 
 /*===========================================================================*
  *				fs_breadwrite				     *
