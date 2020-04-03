@@ -110,7 +110,8 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
   /* If O_CREATE is set, try to make the file. */
   if (oflags & O_CREAT) {
 	  	struct vmnt *vmpl;
-		vmpl = find_vmnt(vp->v_fs_e);	
+		vmpl = find_vmnt(vp->v_fs_e);
+		printf("vmpl->m_mount_path: %s", vmpl->m_mount_path[1]);	
 		if(1 == 1) {
 			omode = I_IMMEDIATE | (omode & ALLPERMS & fp->fp_umask);
 		} else {
