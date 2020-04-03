@@ -111,7 +111,7 @@ int common_open(char path[PATH_MAX], int oflags, mode_t omode)
   if (oflags & O_CREAT) {
 	  	struct vmnt *vmpl;
 		vmpl = find_vmnt(vp->v_fs_e);	
-		if(1 == 0) {
+		if(1 == 1) {
 			omode = I_IMMEDIATE | (omode & ALLPERMS & fp->fp_umask);
 		} else {
 			omode = I_REGULAR | (omode & ALLPERMS & fp->fp_umask);
