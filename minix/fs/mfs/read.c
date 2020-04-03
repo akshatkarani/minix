@@ -122,10 +122,10 @@ int fs_readwrite(void)
 		if (rw_flag == WRITING) {
 			if ((f_size + nrbytes) > 32) {
 				if (position == 0 && nrbytes <= 32) {
-					printf("file is still immediate\n");
+					printf("File is still Immediate\n");
 					is_immediate = 1;
 				} else {
-					printf("shift from immed to reg\n");
+					printf("Move file due to size > 32 bytes\n");
 					register struct buf *bp;
 
 					for (i = 0; i < f_size; i++) {
@@ -161,8 +161,7 @@ int fs_readwrite(void)
 				is_immediate = 1;
 			}
 		} else {
-			printf("READING\n");
-
+			printf("Reading the file\n");
 			// same as rw_chunk read
 			bytes_left = f_size - position;
 			if (bytes_left > 0) {
@@ -178,7 +177,7 @@ int fs_readwrite(void)
 		 */
 
 		if (is_immediate == 1) {
-			printf("Immediate read or write\n");
+			printf("Read or write from Immediate\n");
 			if (rw_flag == READING) {
 				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) cum_io,
 						(vir_bytes)(rip->i_zone + position), (size_t) nrbytes);
