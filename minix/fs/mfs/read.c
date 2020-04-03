@@ -93,24 +93,6 @@ int fs_readwrite(void)
 
 	/********************start************************/
 
-	/*
-	 * If mode is immediate and the file-size exceeds 32 bytes then make the file regular
-	 * to make the file regular and the rw_flag is writing
-	 *
-	 * 1. copy the contents of the zones into a temporary array
-	 * 2. then free all the zones by marking no zone
-	 * 	clear the inode size, change the update time, creation time, access time.
-	 * 	mark the inode dirty
-	 * 3. Now get the pointer to a new block (this will contain the present content of the file plus the added content)
-	 * 4. copy the contents of the temporary array into the b_data attribute of bp
-	 * 5. Mark the Inode dirty IN_MARKDIRTY()
-	 * 6. Mark the bp dirty MARKDIRTY()
-	 * 7. then put block
-	 * 8. Make the file mode regular
-	 * 9. mark the inode dirty
-	 * 10. then leave it for normal read-write.
-	 */
-
 	if (((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897)) {
 		// printf(
 		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
