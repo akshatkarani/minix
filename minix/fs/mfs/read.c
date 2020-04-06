@@ -83,7 +83,12 @@ int fs_readwrite(void)
 	   */
 	  if(position > f_size) clear_zone(rip, f_size, 0);
   }
-	      
+	  
+    /* If this is block i/o, check we can write */
+  if(block_spec && rw_flag == WRITING &&
+  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
+		return EROFS;
+
   cum_io = 0;
   char immed_buff[33];
 	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
@@ -167,11 +172,6 @@ int fs_readwrite(void)
 			printf("%s", immed_buff);
     }
 	}
-
-  /* If this is block i/o, check we can write */
-  if(block_spec && rw_flag == WRITING &&
-  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
-		return EROFS;
 
   /* Split the transfer into chunks that don't span two blocks. */
   while (nrbytes > 0) {
