@@ -413,12 +413,12 @@ int rw_immed(rip, off, chunk, rw_flag, gid, buf_off)
 	if(rw_flag == READING)
 	{
 		r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-				(vir_bytes) (b_data(bp)+off), (size_t) chunk);
+				(vir_bytes) (rip->i_zone+off), (size_t) chunk);
 	}
 	else
 	{
 		r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
-					(vir_bytes) (b_data(bp)+off), (size_t) chunk);
+					(vir_bytes) (rip->i_zone+off), (size_t) chunk);
 		IN_MARKDIRTY(rip);
 	}
 	
