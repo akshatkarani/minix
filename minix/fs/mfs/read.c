@@ -69,7 +69,7 @@ int fs_readwrite(void)
   lmfs_reset_rdwt_err();
 
   /* If this is file i/o, check we can write */
-  if (rw_flag == WRITING && !block_spec) {
+  if (rw_flag == WRITING && !block_spec && (rip->i_mode & I_TYPE) != I_IMMEDIATE) {
   	  if(rip->i_sp->s_rd_only) 
 		  return EROFS;
 
@@ -85,7 +85,7 @@ int fs_readwrite(void)
   }
 	      
   cum_io = 0;
-  char immed_buff[41];
+  char immed_buff[33];
 	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
 	{
     int sanity = 0;
