@@ -455,6 +455,9 @@ int opportunistic;		/* if nonzero, only use cache for metadata */
 
   if(opportunistic) iomode = PREFETCH;
 
+  if((rip->i_mode & I_TYPE) == I_IMMEDIATE)
+    return(NO_BLOCK);
+
   scale = rip->i_sp->s_log_zone_size;	/* for block-zone conversion */
   block_pos = position/rip->i_sp->s_block_size;	/* relative blk # in file */
   zone = block_pos >> scale;	/* position's zone */
