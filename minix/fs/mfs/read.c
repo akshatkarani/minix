@@ -111,7 +111,7 @@ int fs_readwrite(void)
 	 * 10. then leave it for normal read-write.
 	 */
 
-	if ((rip->i_mode & I_TYPE) == I_IMMEDIATE) {
+	if (((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897)) {
 
 		// printf(
 		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
