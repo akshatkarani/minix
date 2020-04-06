@@ -83,14 +83,9 @@ int fs_readwrite(void)
 	   */
 	  if(position > f_size) clear_zone(rip, f_size, 0);
   }
-
-  /* If this is block i/o, check we can write */
-  if(block_spec && rw_flag == WRITING &&
-  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
-		return EROFS;
 	      
   cum_io = 0;
-	if((rip->i_mode & I_TYPE) == I_IMMEDIATE )
+	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
 	{
     int sanity = 0;
     if(f_size > 32) printf("Immediate file is larger than 32 bytes!\n");
@@ -167,6 +162,11 @@ int fs_readwrite(void)
       }
     }
 	}
+
+  /* If this is block i/o, check we can write */
+  if(block_spec && rw_flag == WRITING &&
+  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
+		return EROFS;
 
   /* Split the transfer into chunks that don't span two blocks. */
   while (nrbytes > 0) {
