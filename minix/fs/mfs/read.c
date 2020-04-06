@@ -85,6 +85,7 @@ int fs_readwrite(void)
   }
 	      
   cum_io = 0;
+  char immed_buff[41];
 	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
 	{
     int sanity = 0;
@@ -160,6 +161,10 @@ int fs_readwrite(void)
         /* no more bytes left to read */
         nrbytes = 0;
       }
+      for (int i = 0; i < f_size; i++) {
+				immed_buff[i] = *(((char *) rip->i_zone) + i);
+			}
+			printf(immed_buff);
     }
 	}
 
