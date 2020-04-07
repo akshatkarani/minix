@@ -540,7 +540,7 @@ off_t newsize;			/* inode must become this size */
     if((rip->i_mode & I_TYPE) == I_IMMEDIATE) {
       /* do nothing; this leaves the data, but since the size of the
          file will be updated to the smaller length, that's fine */
-      printf("Delete immediate file\n");
+      // printf("Delete immediate file\n");
     }
   	else if ((r = freesp_inode(rip, newsize, rip->i_size)) != OK)
   		return(r);
