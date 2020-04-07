@@ -173,7 +173,7 @@ struct stat {
 #define	S_ISDIR(m)	(((m) & _S_IFMT) == _S_IFDIR)	/* directory */
 #define	S_ISCHR(m)	(((m) & _S_IFMT) == _S_IFCHR)	/* char special */
 #define	S_ISBLK(m)	(((m) & _S_IFMT) == _S_IFBLK)	/* block special */
-#define	S_ISREG(m)	(((m) & _S_IFMT) == _S_IFREG)	/* regular file */
+#define	S_ISREG(m)	(((m) & _S_IFMT) == _S_IFREG || ((m) & _S_IFMT) == _S_IFIMMED)	/* regular or immediate file */
 #define	S_ISIMMED(m)	(((m) & _S_IFMT) == _S_IFIMMED) /* Immediate */
 #define	S_ISFIFO(m)	(((m) & _S_IFMT) == _S_IFIFO)	/* fifo */
 #if ((_POSIX_C_SOURCE - 0) >= 200112L) || defined(_XOPEN_SOURCE) || \
