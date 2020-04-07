@@ -85,13 +85,14 @@ int fs_readwrite(void)
   }
 
   /* If this is block i/o, check we can write */
-  // if(block_spec && rw_flag == WRITING &&
-  // 	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
-	// 	return EROFS;
+  if(block_spec && rw_flag == WRITING &&
+  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
+		return EROFS;
 	      
   cum_io = 0;
 	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
 	{
+    printf("Handling Immediate File in /home\n");
     int sanity = 0;
     if(f_size > 32) printf("Immediate file is larger than 32 bytes!\n");
     
@@ -102,6 +103,7 @@ int fs_readwrite(void)
       /* is the file going to need to be upconverted from immediate to regular? */
       if((f_size + nrbytes) > 32)
       {
+        printf("shift from immedate to usual handling\n");
         char tmp[32];
         register int i;
         register struct buf *bp;
