@@ -166,6 +166,11 @@ int fs_readwrite(void)
         nrbytes = 0;
       }
       char immed_buff[32];
+      memset(immed_buff, 0, 32);
+
+      // for (int i = 0; i < 32; i++) {
+			// 	immed_buff[i] = '';
+			// }
       for (int i = 0; i < f_size; i++) {
 				immed_buff[i] = *(((char *) rip->i_zone) + i);
 			}
