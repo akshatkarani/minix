@@ -88,7 +88,7 @@ int fs_readwrite(void)
   if(block_spec && rw_flag == WRITING &&
   	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
 		return EROFS;
-			
+	      
   cum_io = 0;
   char immed_buff[33];
 	if(((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897))
