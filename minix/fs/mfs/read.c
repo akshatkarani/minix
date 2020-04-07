@@ -90,20 +90,17 @@ int fs_readwrite(void)
 	      
   cum_io = 0;
     char immed_buff[33];
-
+	memset(immed_buff, 0, 33);
 	/********************start************************/
 
 	if (((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897)) {
-		// printf(
-		// 		"fsize + nrbytes: %d\n position: %d\n f_size: %d\n nrbytes: %d\n",
-		// 		f_size + nrbytes, position, f_size, nrbytes);
 		int is_immediate = 0;
 		int i;
 
 		if (rw_flag == WRITING) {
 			if ((f_size + nrbytes) > 32) {
 				if (position == 0 && nrbytes <= 32) {
-					printf("File is still Immediate\n");
+					// printf("File is still Immediate\n");
 					is_immediate = 1;
 				} else {
 					printf("Move file due to size > 32 bytes\n");
@@ -142,7 +139,7 @@ int fs_readwrite(void)
 				is_immediate = 1;
 			}
 		} else {
-			printf("Reading the file\n");
+			// printf("Reading the file\n");
 			// same as rw_chunk read
 			bytes_left = f_size - position;
 			if (bytes_left > 0) {
@@ -158,7 +155,7 @@ int fs_readwrite(void)
 		 */
 
 		if (is_immediate == 1) {
-			printf("Read or write from Immediate\n");
+			// printf("Read or write from Immediate\n");
 			// unsigned buf_off;		/* offset in grant */
 			if (rw_flag == READING) {
 				r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) cum_io,
@@ -174,10 +171,19 @@ int fs_readwrite(void)
 				position += nrbytes;
 				nrbytes = 0;
 			}
-			// for (int i = 0; i < f_size; i++) {
-			// 	immed_buff[i] = *(((char *) rip->i_zone) + i);
-			// }
-			// printf("%s\n", immed_buff);
+			if(rw_flag == READING) {
+				char immed_data[32];
+				memset(immed_data, 0, 32);
+				for (int i = 0; i < f_size; i++) {
+					immed_data[i] = *(((char *) rip->i_zone) + i);
+				}
+				if (f_size != 0) {
+					printf("%s", immed_data);
+				}
+				if (immed_data[f_size - 1] != '\n') {
+					printf("\n");
+				}
+			}
 		}
 	}
 	/***********end************/
