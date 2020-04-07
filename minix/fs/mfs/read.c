@@ -83,8 +83,8 @@ int fs_readwrite(void)
 	   */
 	  if(position > f_size) clear_zone(rip, f_size, 0);
   }
-	  
-    /* If this is block i/o, check we can write */
+
+  /* If this is block i/o, check we can write */
   if(block_spec && rw_flag == WRITING &&
   	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
 		return EROFS;
