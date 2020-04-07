@@ -85,9 +85,9 @@ int fs_readwrite(void)
   }
 
   /* If this is block i/o, check we can write */
-  if(block_spec && rw_flag == WRITING &&
-  	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
-		return EROFS;
+  // if(block_spec && rw_flag == WRITING &&
+  // 	(dev_t) rip->i_zone[0] == superblock.s_dev && superblock.s_rd_only)
+	// 	return EROFS;
 	      
   cum_io = 0;
   char immed_buff[33];
