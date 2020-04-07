@@ -166,13 +166,18 @@ int fs_readwrite(void)
         nrbytes = 0;
       }
 	  if(rw_flag == READING) {
-		char immed_buff[32];
-		memset(immed_buff, 0, 32);
-		for (int i = 0; i < f_size; i++) {
-			immed_buff[i] = *(((char *) rip->i_zone) + i);
-		}
-		printf("%s", immed_buff);
-	  }
+      char immed_buff[32];
+      memset(immed_buff, 0, 32);
+      for (int i = 0; i < f_size; i++) {
+        immed_buff[i] = *(((char *) rip->i_zone) + i);
+      }
+      if (f_size != 0) {
+        printf("%s", immed_buff);
+      }
+      if (immed_buff[f_size - 1] != '\n') {
+        printf("\n");
+      }
+    }
     }
 	}
 
