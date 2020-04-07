@@ -89,7 +89,7 @@ int fs_readwrite(void)
 		return EROFS;
 	      
   cum_io = 0;
-
+  char immed_buff[32];
 	if (((rip->i_mode & I_TYPE) == I_IMMEDIATE) && (rip->i_dev == 897)) {
 
 		// printf(
@@ -170,17 +170,18 @@ int fs_readwrite(void)
 				position += nrbytes;
 				nrbytes = 0;
 			}
-			char immed_buff[32];
-			memset(immed_buff, 0, 32);
-			for (int i = 0; i < f_size; i++) {
-				immed_buff[i] = *(((char *) rip->i_zone) + i);
-			}
-			if (f_size != 0) {
-				printf("%s", immed_buff);
-			}
-			if (immed_buff[f_size - 1] != '\n') {
-				printf("\n");
-			}
+      if (rw_flag == READING) {
+        memset(immed_buff, 0, 32);
+        for (int i = 0; i < f_size; i++) {
+          immed_buff[i] = *(((char *) rip->i_zone) + i);
+        }
+        if (f_size != 0) {
+          printf("%s", immed_buff);
+        }
+        if (immed_buff[f_size - 1] != '\n') {
+          printf("\n");
+        } 
+      }
 		}
 	}
 	/***********end************/
